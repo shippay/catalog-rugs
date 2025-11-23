@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -26,8 +27,8 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), 
-                        url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="p" x="0" y="0" width="50" height="50" patternUnits="userSpaceOnUse"><path d="M25 0 L50 25 L25 50 L0 25 Z" fill="none" stroke="rgba(139,69,19,0.1)" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23p)"/></svg>');
+            background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
+                url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="p" x="0" y="0" width="50" height="50" patternUnits="userSpaceOnUse"><path d="M25 0 L50 25 L25 50 L0 25 Z" fill="none" stroke="rgba(139,69,19,0.1)" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23p)"/></svg>');
             background-size: cover, 100px 100px;
             background-color: #64210b;
             text-align: center;
@@ -35,14 +36,12 @@
             overflow: hidden;
         }
 
-  
-
         .cover-title {
             font-family: 'Cormorant Garamond', serif;
             font-size: 5rem;
             font-weight: 700;
             color: #fff;
-            text-shadow: 3px 3px 6px rgba(0,0,0,0.5);
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5);
             margin-bottom: 1rem;
             letter-spacing: 3px;
         }
@@ -74,8 +73,12 @@
         }
 
         @keyframes bounce {
-            0%, 100% { transform: translateX(-50%) translateY(0); }
-            50% { transform: translateX(-50%) translateY(10px); }
+            0%, 100% {
+                transform: translateX(-50%) translateY(0);
+            }
+            50% {
+                transform: translateX(-50%) translateY(10px);
+            }
         }
 
         .catalog-section {
@@ -112,7 +115,7 @@
             padding: 2rem;
             margin-bottom: 3rem;
             border: 1px solid #e8e8e8;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
         }
 
         .filter-group {
@@ -179,20 +182,54 @@
             border: 2px solid #ddd;
         }
 
-        .color-filter-btn[data-color="cream"]::before { background: #f5f5dc; }
-        .color-filter-btn[data-color="black"]::before { background: #2a2a2a; }
-        .color-filter-btn[data-color="multicolor"]::before { 
+        .color-filter-btn[data-color="cream"]::before {
+            background: #f5f5dc;
+        }
+
+        .color-filter-btn[data-color="black"]::before {
+            background: #2a2a2a;
+        }
+
+        .color-filter-btn[data-color="multicolor"]::before {
             background: linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 33%, #ffe66d 66%, #a8e6cf 100%);
         }
-        .color-filter-btn[data-color="red"]::before { background: #c44536; }
-        .color-filter-btn[data-color="orange"]::before { background: #e67e22; }
-        .color-filter-btn[data-color="blue"]::before { background: #3498db; }
-        .color-filter-btn[data-color="brown"]::before { background: #8b4513; }
-        .color-filter-btn[data-color="beige"]::before { background: #d2b48c; }
-        .color-filter-btn[data-color="white"]::before { background: #fff; border-color: #999; }
-        .color-filter-btn[data-color="grey"]::before { background: #7f8c8d; }
-        .color-filter-btn[data-color="green"]::before { background: #27ae60; }
-        .color-filter-btn[data-color="pink"]::before { background: #ff69b4; }
+
+        .color-filter-btn[data-color="red"]::before {
+            background: #c44536;
+        }
+
+        .color-filter-btn[data-color="orange"]::before {
+            background: #e67e22;
+        }
+
+        .color-filter-btn[data-color="blue"]::before {
+            background: #3498db;
+        }
+
+        .color-filter-btn[data-color="brown"]::before {
+            background: #8b4513;
+        }
+
+        .color-filter-btn[data-color="beige"]::before {
+            background: #d2b48c;
+        }
+
+        .color-filter-btn[data-color="white"]::before {
+            background: #fff;
+            border-color: #999;
+        }
+
+        .color-filter-btn[data-color="grey"]::before {
+            background: #7f8c8d;
+        }
+
+        .color-filter-btn[data-color="green"]::before {
+            background: #27ae60;
+        }
+
+        .color-filter-btn[data-color="pink"]::before {
+            background: #ff69b4;
+        }
 
         .products-grid {
             display: grid;
@@ -211,7 +248,7 @@
 
         .product-card:hover {
             transform: translateY(-8px);
-            box-shadow: 0 12px 24px rgba(0,0,0,0.12);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
         }
 
         .product-image {
@@ -235,9 +272,9 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background-image: 
-                repeating-linear-gradient(45deg, transparent, transparent 15px, rgba(139,69,19,.03) 15px, rgba(139,69,19,.03) 30px),
-                repeating-linear-gradient(-45deg, transparent, transparent 15px, rgba(139,69,19,.03) 15px, rgba(139,69,19,.03) 30px);
+            background-image:
+                repeating-linear-gradient(45deg, transparent, transparent 15px, rgba(139, 69, 19, .03) 15px, rgba(139, 69, 19, .03) 30px),
+                repeating-linear-gradient(-45deg, transparent, transparent 15px, rgba(139, 69, 19, .03) 15px, rgba(139, 69, 19, .03) 30px);
         }
 
         .product-number {
@@ -290,6 +327,13 @@
             font-size: 1.2rem;
         }
 
+        .loading {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: #8b4513;
+            font-size: 1.2rem;
+        }
+
         .cta-section {
             background: #64210b;
             color: #fff;
@@ -332,7 +376,7 @@
         .cta-button:hover {
             background: #fff;
             transform: translateY(-3px);
-            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
         }
 
         .contact-info {
@@ -353,11 +397,11 @@
             .cover-title {
                 font-size: 3rem;
             }
-            
+
             .section-title {
                 font-size: 2rem;
             }
-            
+
             .products-grid {
                 grid-template-columns: 1fr;
                 gap: 2rem;
@@ -365,6 +409,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="cover-page">
         <h1 class="cover-title">MOROCCAN RUGS</h1>
@@ -377,7 +422,7 @@
         <div class="section-header">
             <h2 class="section-title">Our Collection</h2>
             <p class="section-description">
-                Each piece is handcrafted by skilled Moroccan artisans using traditional techniques 
+                Each piece is handcrafted by skilled Moroccan artisans using traditional techniques
                 passed down through generations. All sizes can be customized to your needs.
             </p>
         </div>
@@ -394,7 +439,7 @@
                     <button class="filter-btn" data-category="mrirt">Mrirt</button>
                 </div>
             </div>
-            
+
             <div class="filter-group">
                 <span class="filter-label">Color</span>
                 <div class="filter-buttons" id="colorFilters">
@@ -416,28 +461,33 @@
         </div>
 
         <div class="products-grid" id="productsGrid">
-            <!-- Products will be inserted here -->
+            <div class="loading">Loading catalog...</div>
         </div>
     </div>
 
     <div class="cta-section">
         <h2 class="cta-title">Interested in Our Rugs?</h2>
         <p class="cta-text">
-            Each rug tells a unique story. Contact us to learn more about our collection, 
+            Each rug tells a unique story. Contact us to learn more about our collection,
             request detailed photos, or inquire about custom sizes.
         </p>
-        <a href="mailto:your.email@example.com" class="cta-button">Get In Touch</a>
+        <a href="mailto:contact@shippay.ma" class="cta-button">Get In Touch</a>
         <div class="contact-info">
             <p>
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 4px;">
-                    <rect width="20" height="16" x="2" y="4" rx="2"/>
-                    <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    style="vertical-align: middle; margin-right: 4px;">
+                    <rect width="20" height="16" x="2" y="4" rx="2" />
+                    <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
                 </svg>
-                contact@shippay.ma | 
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 4px;">
-                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
-                    <path d="M14.05 2a9 9 0 0 1 8 7.94"/>
-                    <path d="M14.05 6A5 5 0 0 1 18 10"/>
+                contact@shippay.ma |
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    style="vertical-align: middle; margin-right: 4px;">
+                    <path
+                        d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+                    <path d="M14.05 2a9 9 0 0 1 8 7.94" />
+                    <path d="M14.05 6A5 5 0 0 1 18 10" />
                 </svg>
                 +212 604 30 30 36
             </p>
@@ -450,67 +500,14 @@
 
     <script>
         // ====================================
-        // EDIT YOUR CATALOG ITEMS HERE
+        // CONFIGURATION - Update CSV filename here
         // ====================================
-        const rugs = [
-            {
-                category: "beni-ourain",
-                color: "cream",
-                image: "images/WSM000.jpg", // Add your image path like "images/rug1.jpg"
-                emoji: "◇"
-            },
-            {
-                category: "beni-ourain",
-                color: "blue",
-                image: "images/WSM001.jpg",
-                emoji: "▭"
-            },
-            {
-                category: "azilal",
-                color: "multicolor",
-                image: "",
-                emoji: "◐"
-            },
-            {
-                category: "azilal",
-                color: "pink",
-                image: "images/WSM002.jpg",
-                emoji: "△"
-            },
-            {
-                category: "boucherouite",
-                color: "multicolor",
-                image: "",
-                emoji: "◨"
-            },
-            {
-                category: "kilim",
-                color: "red",
-                image: "",
-                emoji: "◈"
-            },
-            {
-                category: "mrirt",
-                color: "cream",
-                image: "",
-                emoji: "◎"
-            },
-            {
-                category: "beni-ourain",
-                color: "white",
-                image: "images/WSM003.jpg",
-                emoji: "◇"
-            },
-            {
-                category: "azilal",
-                color: "blue",
-                image: "",
-                emoji: "◐"
-            }
-        ];
+        const CSV_FILE = 'rugs.csv';
         // ====================================
-        // END OF EDITABLE SECTION
-        // ====================================
+
+        let rugs = [];
+        let activeCategory = 'all';
+        let activeColor = 'all';
 
         const colorMap = {
             cream: '#f5f5dc',
@@ -527,11 +524,42 @@
             pink: '#ff69b4'
         };
 
-        let activeCategory = 'all';
-        let activeColor = 'all';
+        // Load CSV file
+        async function loadRugs() {
+            try {
+                const response = await fetch(CSV_FILE);
+                if (!response.ok) {
+                    throw new Error('CSV file not found');
+                }
+                const csvText = await response.text();
+                
+                // Parse CSV (simple parser for basic CSV format)
+                const lines = csvText.trim().split('\n');
+                const headers = lines[0].split(',').map(h => h.trim());
+                
+                rugs = lines.slice(1)
+                    .filter(line => line.trim())
+                    .map(line => {
+                        const values = line.split(',').map(v => v.trim());
+                        return {
+                            category: values[0] || '',
+                            color: values[1] || '',
+                            image: values[2] || '',
+                            emoji: values[3] || '◇'
+                        };
+                    });
+                
+                renderRugs();
+            } catch (error) {
+                console.error('Error loading rugs:', error);
+                document.getElementById('productsGrid').innerHTML = 
+                    '<div class="no-results">Error loading catalog. Please make sure rugs.csv exists in the same folder.</div>';
+            }
+        }
 
         function getColorStyle(color) {
             const colorValue = colorMap[color];
+            if (!colorValue) return 'background-color: #ccc;';
             if (colorValue.startsWith('linear-gradient')) {
                 return `background: ${colorValue};`;
             }
@@ -540,7 +568,7 @@
 
         function renderRugs() {
             const grid = document.getElementById('productsGrid');
-            
+
             const filtered = rugs.filter(rug => {
                 const categoryMatch = activeCategory === 'all' || rug.category === activeCategory;
                 const colorMatch = activeColor === 'all' || rug.color === activeColor;
@@ -552,26 +580,31 @@
                 return;
             }
 
-            grid.innerHTML = filtered.map((rug, index) => `
-                <div class="product-card">
-                    <div class="product-image" style="${rug.image ? `background-image: url('${rug.image}');` : ''}">
-                        <div class="product-number">No. ${String(index + 1).padStart(3, '0')}</div>
-                        ${!rug.image ? `<span style="position: relative; z-index: 1; font-size: 5rem;">${rug.emoji}</span>` : ''}
-                    </div>
-                    <div class="product-info">
-                        <div class="product-category">${rug.category.replace('-', ' ')}</div>
-                        <div class="product-color">
-                            <span class="color-dot" style="${getColorStyle(rug.color)}"></span>
-                            <span style="text-transform: capitalize;">${rug.color}</span>
+            grid.innerHTML = filtered.map((rug, index) => {
+                const imageStyle = rug.image ? `background-image: url('${rug.image}');` : '';
+                const productNumber = rug.image ? rug.image.split('/').pop().split('.')[0] : `WSM${String(index + 1).padStart(3, '0')}`;
+
+                return `
+                    <div class="product-card">
+                        <div class="product-image" style="${imageStyle}">
+                            <div class="product-number">${productNumber}</div>
+                            ${!rug.image ? `<span style="position: relative; z-index: 1; font-size: 5rem;">${rug.emoji}</span>` : ''}
+                        </div>
+                        <div class="product-info">
+                            <div class="product-category">${rug.category.replace('-', ' ')}</div>
+                            <div class="product-color">
+                                <span class="color-dot" style="${getColorStyle(rug.color)}"></span>
+                                <span style="text-transform: capitalize;">${rug.color}</span>
+                            </div>
                         </div>
                     </div>
-                </div>
-            `).join('');
+                `;
+            }).join('');
         }
 
         // Category filter
         document.querySelectorAll('#categoryFilters .filter-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
+            btn.addEventListener('click', function () {
                 document.querySelectorAll('#categoryFilters .filter-btn').forEach(b => b.classList.remove('active'));
                 this.classList.add('active');
                 activeCategory = this.dataset.category;
@@ -581,7 +614,7 @@
 
         // Color filter
         document.querySelectorAll('#colorFilters .filter-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
+            btn.addEventListener('click', function () {
                 document.querySelectorAll('#colorFilters .filter-btn').forEach(b => b.classList.remove('active'));
                 this.classList.add('active');
                 activeColor = this.dataset.color;
@@ -589,7 +622,9 @@
             });
         });
 
-        renderRugs();
+        // Initialize
+        loadRugs();
     </script>
 </body>
+
 </html>
