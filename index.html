@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Moroccan Rug Catalog</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Montserrat:wght@300;400;600&display=swap');
 
@@ -108,6 +110,34 @@
             max-width: 700px;
             margin: 0 auto;
             line-height: 1.8;
+        }
+
+        .pdf-download-btn {
+            background: #8b4513;
+            color: #fff;
+            padding: 1rem 2rem;
+            border: none;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            margin: 2rem auto;
+            display: block;
+        }
+
+        .pdf-download-btn:hover {
+            background: #d4af37;
+            color: #2a2a2a;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .pdf-download-btn:disabled {
+            background: #999;
+            cursor: not-allowed;
+            transform: none;
         }
 
         .filters-container {
@@ -427,6 +457,10 @@
             </p>
         </div>
 
+        <button class="pdf-download-btn" id="downloadPdfBtn">
+            📥 Download PDF Catalog
+        </button>
+
         <div class="filters-container">
             <div class="filter-group">
                 <span class="filter-label">Category</span>
@@ -499,12 +533,7 @@
     </footer>
 
     <script>
-        // ====================================
-        // CONFIGURATION - Update CSV filename here
-        // ====================================
-        const CSV_FILE = 'rugs.csv';
-        // ====================================
-
+        const CSV_FILE = '/Users/mac/Documents/shippay-Catalogs/rugs.csv';
         let rugs = [];
         let activeCategory = 'all';
         let activeColor = 'all';
@@ -524,7 +553,6 @@
             pink: '#ff69b4'
         };
 
-        // Load CSV file
         async function loadRugs() {
             try {
                 const response = await fetch(CSV_FILE);
@@ -533,7 +561,6 @@
                 }
                 const csvText = await response.text();
                 
-                // Parse CSV (simple parser for basic CSV format)
                 const lines = csvText.trim().split('\n');
                 const headers = lines[0].split(',').map(h => h.trim());
                 
@@ -602,7 +629,6 @@
             }).join('');
         }
 
-        // Category filter
         document.querySelectorAll('#categoryFilters .filter-btn').forEach(btn => {
             btn.addEventListener('click', function () {
                 document.querySelectorAll('#categoryFilters .filter-btn').forEach(b => b.classList.remove('active'));
@@ -612,7 +638,6 @@
             });
         });
 
-        // Color filter
         document.querySelectorAll('#colorFilters .filter-btn').forEach(btn => {
             btn.addEventListener('click', function () {
                 document.querySelectorAll('#colorFilters .filter-btn').forEach(b => b.classList.remove('active'));
@@ -622,7 +647,152 @@
             });
         });
 
-        // Initialize
+        // PDF Generation
+        document.getElementById('downloadPdfBtn').addEventListener('click', generatePDF);
+
+        async function generatePDF() {
+            const btn = document.getElementById('downloadPdfBtn');
+            btn.disabled = true;
+            btn.textContent = 'Generating PDF...';
+
+            try {
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF('p', 'mm', 'a4');
+                const pageWidth = pdf.internal.pageSize.getWidth();
+                const pageHeight = pdf.internal.pageSize.getHeight();
+                const margin = 15;
+                const contentWidth = pageWidth - (margin * 2);
+
+                // Cover Page
+                pdf.setFillColor(100, 33, 11);
+                pdf.rect(0, 0, pageWidth, pageHeight, 'F');
+                
+                pdf.setTextColor(255, 255, 255);
+                pdf.setFontSize(48);
+                pdf.setFont(undefined, 'bold');
+                pdf.text('MOROCCAN RUGS', pageWidth / 2, 100, { align: 'center' });
+                
+                pdf.setFontSize(18);
+                pdf.setFont(undefined, 'normal');
+                pdf.text('By Shippay', pageWidth / 2, 120, { align: 'center' });
+                
+                pdf.setTextColor(212, 175, 55);
+                pdf.setFontSize(16);
+                pdf.text('2025 Catalog', pageWidth / 2, 135, { align: 'center' });
+
+                // Group rugs by category
+                const categories = ['beni-ourain', 'azilal', 'boucherouite', 'kilim', 'mrirt'];
+                const rugsByCategory = {};
+                
+                categories.forEach(cat => {
+                    rugsByCategory[cat] = rugs.filter(r => r.category === cat);
+                });
+
+                // Generate pages for each category
+                for (const category of categories) {
+                    const categoryRugs = rugsByCategory[category];
+                    if (categoryRugs.length === 0) continue;
+
+                    pdf.addPage();
+                    
+                    // Category header
+                    pdf.setFillColor(139, 69, 19);
+                    pdf.rect(0, 0, pageWidth, 40, 'F');
+                    pdf.setTextColor(255, 255, 255);
+                    pdf.setFontSize(32);
+                    pdf.setFont(undefined, 'bold');
+                    pdf.text(category.replace('-', ' ').toUpperCase(), pageWidth / 2, 25, { align: 'center' });
+
+                    let yOffset = 55;
+                    let xOffset = margin;
+                    const cardWidth = (contentWidth - 10) / 2;
+                    const cardHeight = 110;
+                    let cardsInRow = 0;
+
+                    for (let i = 0; i < categoryRugs.length; i++) {
+                        const rug = categoryRugs[i];
+                        
+                        if (yOffset + cardHeight > pageHeight - margin) {
+                            pdf.addPage();
+                            yOffset = margin;
+                            xOffset = margin;
+                            cardsInRow = 0;
+                        }
+
+                        // Card background
+                        pdf.setFillColor(255, 255, 255);
+                        pdf.rect(xOffset, yOffset, cardWidth, cardHeight, 'F');
+                        pdf.setDrawColor(232, 232, 232);
+                        pdf.rect(xOffset, yOffset, cardWidth, cardHeight, 'S');
+
+                        // Image placeholder
+                        const imgHeight = 70;
+                        pdf.setFillColor(245, 245, 245);
+                        pdf.rect(xOffset, yOffset, cardWidth, imgHeight, 'F');
+                        
+                        // Product number
+                        const productNumber = rug.image ? rug.image.split('/').pop().split('.')[0] : `WSM${String(i + 1).padStart(3, '0')}`;
+                        pdf.setFillColor(139, 69, 19);
+                        pdf.rect(xOffset + 2, yOffset + 2, 30, 8, 'F');
+                        pdf.setTextColor(255, 255, 255);
+                        pdf.setFontSize(10);
+                        pdf.text(productNumber, xOffset + 17, yOffset + 7, { align: 'center' });
+
+                        // Category name
+                        pdf.setTextColor(139, 69, 19);
+                        pdf.setFontSize(14);
+                        pdf.setFont(undefined, 'bold');
+                        pdf.text(category.replace('-', ' '), xOffset + 5, yOffset + imgHeight + 8);
+
+                        // Color
+                        pdf.setTextColor(102, 102, 102);
+                        pdf.setFontSize(10);
+                        pdf.setFont(undefined, 'normal');
+                        pdf.text(`Color: ${rug.color}`, xOffset + 5, yOffset + imgHeight + 15);
+
+                        cardsInRow++;
+                        if (cardsInRow === 2) {
+                            yOffset += cardHeight + 10;
+                            xOffset = margin;
+                            cardsInRow = 0;
+                        } else {
+                            xOffset += cardWidth + 10;
+                        }
+                    }
+                }
+
+                // Contact page
+                pdf.addPage();
+                pdf.setFillColor(100, 33, 11);
+                pdf.rect(0, 0, pageWidth, pageHeight, 'F');
+                
+                pdf.setTextColor(255, 255, 255);
+                pdf.setFontSize(36);
+                pdf.setFont(undefined, 'bold');
+                pdf.text('Get In Touch', pageWidth / 2, 80, { align: 'center' });
+                
+                pdf.setFontSize(14);
+                pdf.setFont(undefined, 'normal');
+                pdf.text('Each rug tells a unique story.', pageWidth / 2, 100, { align: 'center' });
+                pdf.text('Contact us to learn more about our collection.', pageWidth / 2, 110, { align: 'center' });
+                
+                pdf.setTextColor(212, 175, 55);
+                pdf.setFontSize(16);
+                pdf.text('contact@shippay.ma', pageWidth / 2, 140, { align: 'center' });
+                pdf.text('+212 604 30 30 36', pageWidth / 2, 155, { align: 'center' });
+
+                pdf.save('Moroccan-Rugs-Catalog-2025.pdf');
+                
+                btn.disabled = false;
+                btn.textContent = '📥 Download PDF Catalog';
+            } catch (error) {
+                console.error('Error generating PDF:', error);
+                alert('Error generating PDF. Please try again.');
+                btn.disabled = false;
+                btn.textContent = '📥 Download PDF Catalog';
+            }
+        }
+
         loadRugs();
     </script>
 </body>
