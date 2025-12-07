@@ -650,35 +650,101 @@
         // PDF Generation
         document.getElementById('downloadPdfBtn').addEventListener('click', generatePDF);
 
+        async function loadImageAsBase64(url) {
+            try {
+                const response = await fetch(url);
+                const blob = await response.blob();
+                return new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onloadend = () => resolve(reader.result);
+                    reader.onerror = reject;
+                    reader.readAsDataURL(blob);
+                });
+            } catch (error) {
+                console.error('Error loading image:', url, error);
+                return null;
+            }
+        }
+
         async function generatePDF() {
             const btn = document.getElementById('downloadPdfBtn');
             btn.disabled = true;
-            btn.textContent = 'Generating PDF...';
+            btn.textContent = 'Generating PDF... Please wait';
 
             try {
                 const { jsPDF } = window.jspdf;
                 const pdf = new jsPDF('p', 'mm', 'a4');
                 const pageWidth = pdf.internal.pageSize.getWidth();
                 const pageHeight = pdf.internal.pageSize.getHeight();
-                const margin = 15;
-                const contentWidth = pageWidth - (margin * 2);
+                const margin = 20;
 
-                // Cover Page
+                // Helper function for decorative pattern
+                function drawPattern(pdf, x, y, width, height) {
+                    pdf.setDrawColor(212, 175, 55);
+                    pdf.setLineWidth(0.3);
+                    const step = 5;
+                    for (let i = 0; i < width; i += step) {
+                        pdf.line(x + i, y, x + i, y + height);
+                    }
+                }
+
+                // Cover Page with luxury design
                 pdf.setFillColor(100, 33, 11);
                 pdf.rect(0, 0, pageWidth, pageHeight, 'F');
                 
+                // Decorative borders
+                pdf.setDrawColor(212, 175, 55);
+                pdf.setLineWidth(1);
+                pdf.rect(15, 15, pageWidth - 30, pageHeight - 30, 'S');
+                pdf.setLineWidth(0.3);
+                pdf.rect(17, 17, pageWidth - 34, pageHeight - 34, 'S');
+                
+                // Decorative corner elements
+                const cornerSize = 20;
+                pdf.setDrawColor(212, 175, 55);
+                pdf.setLineWidth(0.5);
+                // Top left
+                pdf.line(15, 15 + cornerSize, 15 + cornerSize, 15);
+                // Top right
+                pdf.line(pageWidth - 15 - cornerSize, 15, pageWidth - 15, 15 + cornerSize);
+                // Bottom left
+                pdf.line(15, pageHeight - 15 - cornerSize, 15 + cornerSize, pageHeight - 15);
+                // Bottom right
+                pdf.line(pageWidth - 15 - cornerSize, pageHeight - 15, pageWidth - 15, pageHeight - 15 - cornerSize);
+                
+                // Title with elegant styling
                 pdf.setTextColor(255, 255, 255);
-                pdf.setFontSize(48);
-                pdf.setFont(undefined, 'bold');
-                pdf.text('MOROCCAN RUGS', pageWidth / 2, 100, { align: 'center' });
+                pdf.setFontSize(56);
+                pdf.setFont('times', 'bold');
+                pdf.text('MOROCCAN', pageWidth / 2, 90, { align: 'center' });
+                pdf.text('RUGS', pageWidth / 2, 110, { align: 'center' });
                 
-                pdf.setFontSize(18);
-                pdf.setFont(undefined, 'normal');
-                pdf.text('By Shippay', pageWidth / 2, 120, { align: 'center' });
+                // Decorative line
+                pdf.setDrawColor(212, 175, 55);
+                pdf.setLineWidth(0.5);
+                pdf.line(pageWidth / 2 - 40, 120, pageWidth / 2 + 40, 120);
                 
-                pdf.setTextColor(212, 175, 55);
+                // Subtitle
                 pdf.setFontSize(16);
-                pdf.text('2025 Catalog', pageWidth / 2, 135, { align: 'center' });
+                pdf.setFont('helvetica', 'normal');
+                pdf.setTextColor(245, 245, 245);
+                pdf.text('Handcrafted Authenticity', pageWidth / 2, 135, { align: 'center' });
+                
+                pdf.setFontSize(20);
+                pdf.setFont('times', 'italic');
+                pdf.text('by Shippay', pageWidth / 2, 150, { align: 'center' });
+                
+                // Year in golden color
+                pdf.setTextColor(212, 175, 55);
+                pdf.setFontSize(28);
+                pdf.setFont('times', 'bold');
+                pdf.text('2025', pageWidth / 2, 170, { align: 'center' });
+                
+                // Bottom text
+                pdf.setTextColor(200, 200, 200);
+                pdf.setFontSize(10);
+                pdf.setFont('helvetica', 'normal');
+                pdf.text('Artisan Collection', pageWidth / 2, pageHeight - 25, { align: 'center' });
 
                 // Group rugs by category
                 const categories = ['beni-ourain', 'azilal', 'boucherouite', 'kilim', 'mrirt'];
@@ -695,19 +761,34 @@
 
                     pdf.addPage();
                     
-                    // Category header
-                    pdf.setFillColor(139, 69, 19);
-                    pdf.rect(0, 0, pageWidth, 40, 'F');
-                    pdf.setTextColor(255, 255, 255);
-                    pdf.setFontSize(32);
-                    pdf.setFont(undefined, 'bold');
-                    pdf.text(category.replace('-', ' ').toUpperCase(), pageWidth / 2, 25, { align: 'center' });
+                    // Elegant category header
+                    pdf.setFillColor(250, 248, 245);
+                    pdf.rect(0, 0, pageWidth, 50, 'F');
+                    
+                    // Decorative top border
+                    pdf.setFillColor(212, 175, 55);
+                    pdf.rect(0, 0, pageWidth, 3, 'F');
+                    
+                    // Category title
+                    pdf.setTextColor(100, 33, 11);
+                    pdf.setFontSize(36);
+                    pdf.setFont('times', 'bold');
+                    const categoryName = category.replace('-', ' ').toUpperCase();
+                    pdf.text(categoryName, pageWidth / 2, 32, { align: 'center' });
+                    
+                    // Decorative underline
+                    const textWidth = pdf.getTextWidth(categoryName);
+                    pdf.setDrawColor(212, 175, 55);
+                    pdf.setLineWidth(0.5);
+                    pdf.line(pageWidth / 2 - textWidth / 2, 38, pageWidth / 2 + textWidth / 2, 38);
 
-                    let yOffset = 55;
+                    let yOffset = 65;
                     let xOffset = margin;
-                    const cardWidth = (contentWidth - 10) / 2;
-                    const cardHeight = 110;
+                    const cardWidth = (pageWidth - (margin * 2) - 10) / 2;
+                    const cardHeight = 120;
                     let cardsInRow = 0;
+
+                    btn.textContent = `Processing ${categoryName}...`;
 
                     for (let i = 0; i < categoryRugs.length; i++) {
                         const rug = categoryRugs[i];
@@ -719,40 +800,79 @@
                             cardsInRow = 0;
                         }
 
-                        // Card background
+                        // Card with shadow effect
+                        pdf.setFillColor(248, 248, 248);
+                        pdf.rect(xOffset + 1, yOffset + 1, cardWidth, cardHeight, 'F');
                         pdf.setFillColor(255, 255, 255);
                         pdf.rect(xOffset, yOffset, cardWidth, cardHeight, 'F');
-                        pdf.setDrawColor(232, 232, 232);
+                        pdf.setDrawColor(220, 220, 220);
+                        pdf.setLineWidth(0.3);
                         pdf.rect(xOffset, yOffset, cardWidth, cardHeight, 'S');
 
-                        // Image placeholder
-                        const imgHeight = 70;
-                        pdf.setFillColor(245, 245, 245);
-                        pdf.rect(xOffset, yOffset, cardWidth, imgHeight, 'F');
+                        // Try to load and add actual image
+                        const imgHeight = 80;
+                        if (rug.image) {
+                            try {
+                                const imgData = await loadImageAsBase64(rug.image);
+                                if (imgData) {
+                                    pdf.addImage(imgData, 'JPEG', xOffset + 2, yOffset + 2, cardWidth - 4, imgHeight - 4, undefined, 'FAST');
+                                } else {
+                                    // Fallback pattern
+                                    pdf.setFillColor(245, 240, 235);
+                                    pdf.rect(xOffset + 2, yOffset + 2, cardWidth - 4, imgHeight - 4, 'F');
+                                }
+                            } catch (error) {
+                                pdf.setFillColor(245, 240, 235);
+                                pdf.rect(xOffset + 2, yOffset + 2, cardWidth - 4, imgHeight - 4, 'F');
+                            }
+                        } else {
+                            pdf.setFillColor(245, 240, 235);
+                            pdf.rect(xOffset + 2, yOffset + 2, cardWidth - 4, imgHeight - 4, 'F');
+                        }
                         
-                        // Product number
-                        const productNumber = rug.image ? rug.image.split('/').pop().split('.')[0] : `WSM${String(i + 1).padStart(3, '0')}`;
-                        pdf.setFillColor(139, 69, 19);
-                        pdf.rect(xOffset + 2, yOffset + 2, 30, 8, 'F');
+                        // Product number badge
+                        const productNumber = rug.image ? rug.image.split('/').pop().split('.')[0].toUpperCase() : `WSM${String(i + 1).padStart(3, '0')}`;
+                        pdf.setFillColor(100, 33, 11);
+                        pdf.rect(xOffset + 5, yOffset + 5, 28, 8, 'F');
                         pdf.setTextColor(255, 255, 255);
-                        pdf.setFontSize(10);
-                        pdf.text(productNumber, xOffset + 17, yOffset + 7, { align: 'center' });
+                        pdf.setFontSize(9);
+                        pdf.setFont('helvetica', 'bold');
+                        pdf.text(productNumber, xOffset + 19, yOffset + 10.5, { align: 'center' });
 
+                        // Info section
+                        const infoY = yOffset + imgHeight + 5;
+                        
                         // Category name
                         pdf.setTextColor(139, 69, 19);
-                        pdf.setFontSize(14);
-                        pdf.setFont(undefined, 'bold');
-                        pdf.text(category.replace('-', ' '), xOffset + 5, yOffset + imgHeight + 8);
+                        pdf.setFontSize(13);
+                        pdf.setFont('times', 'bold');
+                        pdf.text(category.replace('-', ' ').toUpperCase(), xOffset + 5, infoY + 5);
 
-                        // Color
-                        pdf.setTextColor(102, 102, 102);
+                        // Color with dot indicator
+                        pdf.setTextColor(100, 100, 100);
                         pdf.setFontSize(10);
-                        pdf.setFont(undefined, 'normal');
-                        pdf.text(`Color: ${rug.color}`, xOffset + 5, yOffset + imgHeight + 15);
+                        pdf.setFont('helvetica', 'normal');
+                        
+                        // Color dot
+                        const colorValue = colorMap[rug.color] || '#ccc';
+                        if (colorValue.startsWith('linear-gradient')) {
+                            // Multicolor representation
+                            pdf.setFillColor(255, 107, 107);
+                            pdf.circle(xOffset + 6, infoY + 12, 2, 'F');
+                        } else {
+                            const rgb = hexToRgb(colorValue);
+                            pdf.setFillColor(rgb.r, rgb.g, rgb.b);
+                            pdf.circle(xOffset + 6, infoY + 12, 2, 'F');
+                            pdf.setDrawColor(200, 200, 200);
+                            pdf.setLineWidth(0.2);
+                            pdf.circle(xOffset + 6, infoY + 12, 2, 'S');
+                        }
+                        
+                        pdf.text(`Color: ${rug.color.charAt(0).toUpperCase() + rug.color.slice(1)}`, xOffset + 11, infoY + 13);
 
                         cardsInRow++;
                         if (cardsInRow === 2) {
-                            yOffset += cardHeight + 10;
+                            yOffset += cardHeight + 8;
                             xOffset = margin;
                             cardsInRow = 0;
                         } else {
@@ -761,25 +881,60 @@
                     }
                 }
 
-                // Contact page
+                // Contact page with elegant design
                 pdf.addPage();
                 pdf.setFillColor(100, 33, 11);
                 pdf.rect(0, 0, pageWidth, pageHeight, 'F');
                 
+                // Decorative border
+                pdf.setDrawColor(212, 175, 55);
+                pdf.setLineWidth(1);
+                pdf.rect(20, 20, pageWidth - 40, pageHeight - 40, 'S');
+                pdf.setLineWidth(0.3);
+                pdf.rect(22, 22, pageWidth - 44, pageHeight - 44, 'S');
+                
+                // Contact title
                 pdf.setTextColor(255, 255, 255);
-                pdf.setFontSize(36);
-                pdf.setFont(undefined, 'bold');
-                pdf.text('Get In Touch', pageWidth / 2, 80, { align: 'center' });
+                pdf.setFontSize(42);
+                pdf.setFont('times', 'bold');
+                pdf.text('Get In Touch', pageWidth / 2, 70, { align: 'center' });
                 
+                // Decorative line
+                pdf.setDrawColor(212, 175, 55);
+                pdf.setLineWidth(0.5);
+                pdf.line(pageWidth / 2 - 30, 77, pageWidth / 2 + 30, 77);
+                
+                // Description
+                pdf.setFontSize(12);
+                pdf.setFont('helvetica', 'normal');
+                pdf.setTextColor(245, 245, 245);
+                const desc1 = 'Each rug tells a unique story of Moroccan heritage.';
+                const desc2 = 'Contact us to learn more about our collection,';
+                const desc3 = 'request detailed photos, or inquire about custom sizes.';
+                pdf.text(desc1, pageWidth / 2, 95, { align: 'center' });
+                pdf.text(desc2, pageWidth / 2, 103, { align: 'center' });
+                pdf.text(desc3, pageWidth / 2, 111, { align: 'center' });
+                
+                // Contact info in golden boxes
+                pdf.setFillColor(212, 175, 55);
+                pdf.roundedRect(40, 130, pageWidth - 80, 16, 2, 2, 'F');
+                pdf.setTextColor(100, 33, 11);
                 pdf.setFontSize(14);
-                pdf.setFont(undefined, 'normal');
-                pdf.text('Each rug tells a unique story.', pageWidth / 2, 100, { align: 'center' });
-                pdf.text('Contact us to learn more about our collection.', pageWidth / 2, 110, { align: 'center' });
-                
-                pdf.setTextColor(212, 175, 55);
-                pdf.setFontSize(16);
+                pdf.setFont('helvetica', 'bold');
                 pdf.text('contact@shippay.ma', pageWidth / 2, 140, { align: 'center' });
-                pdf.text('+212 604 30 30 36', pageWidth / 2, 155, { align: 'center' });
+                
+                pdf.setFillColor(212, 175, 55);
+                pdf.roundedRect(40, 155, pageWidth - 80, 16, 2, 2, 'F');
+                pdf.setTextColor(100, 33, 11);
+                pdf.text('+212 604 30 30 36', pageWidth / 2, 165, { align: 'center' });
+                
+                // Footer
+                pdf.setTextColor(200, 200, 200);
+                pdf.setFontSize(10);
+                pdf.setFont('helvetica', 'italic');
+                pdf.text('Handcrafted with love in Morocco', pageWidth / 2, pageHeight - 30, { align: 'center' });
+                pdf.setFont('helvetica', 'normal');
+                pdf.text('© 2025 Shippay - Moroccan Rug Collection', pageWidth / 2, pageHeight - 22, { align: 'center' });
 
                 pdf.save('Moroccan-Rugs-Catalog-2025.pdf');
                 
@@ -791,6 +946,16 @@
                 btn.disabled = false;
                 btn.textContent = '📥 Download PDF Catalog';
             }
+        }
+
+        // Helper function to convert hex to RGB
+        function hexToRgb(hex) {
+            const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+            return result ? {
+                r: parseInt(result[1], 16),
+                g: parseInt(result[2], 16),
+                b: parseInt(result[3], 16)
+            } : { r: 200, g: 200, b: 200 };
         }
 
         loadRugs();
